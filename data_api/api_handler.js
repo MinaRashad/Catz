@@ -8,6 +8,7 @@
 const request = require('request');
 const express = require('express');
 const router = express.Router();
+const app = express();
 const json = require('json');
 const fs = require('fs');
 
@@ -47,7 +48,7 @@ function login() {
                     console.error(error)
                     return reject(error)
                 }
-
+                console.log(username, password, account_number) 
                 if(body['data']['token']) console.log(`Login successful. Token: ${body['data']['token']}`)
                 resolve(body['data'])
         })
@@ -84,7 +85,7 @@ function save_dataset(){
                     "objectAction": "search",
                     "search": {
                         "resultStart": 0,
-                        "resultLimit":200,
+                        "resultLimit":300,
                         "resultSort": "animalCreatedDate",
                         "resultOrder": "asc",
                         "filters": [
@@ -97,9 +98,20 @@ function save_dataset(){
                                 fieldName: "animalStatus",
                                 operation: "equals",
                                 criteria: "Available"
-                            }                        
+                            },
+                            {
+                                fieldName: "animalStatus",
+                                operation: "equals",
+                                criteria: "Hold"
+                            },
+                            {
+                                fieldName: "animalStatus",
+                                operation: "equals",
+                                criteria: "Pending"
+                            }
+                                                    
                         ],
-                        "filterProcessing": "1 AND 2",
+                        "filterProcessing": "1 AND (2 OR 3 OR 4)",
                         "fields": ["animalID",
                                 "animalName",
                                 "animalOthernames",
@@ -125,7 +137,7 @@ function save_dataset(){
                 data = body['data']
                 fs.writeFile(FILENAME,JSON.stringify(data), (err) => {
                     if (err) throw err;
-                    console.log('Data saved to file');
+                    console.log(Object.keys(data).length + ' cats saved to file successfully.');
                 });
 
                 resolve(data)
@@ -163,6 +175,8 @@ function read_dataset(){
  */
 
 function search(search_term){
+    search_term = search_term?search_term:''
+    console.log('searching for: '+search_term)
     return new Promise((resolve,reject)=>{
         read_dataset().then(data => {
             // turn data json into array
@@ -245,16 +259,20 @@ function get_journals(cat_id){
 }
 
 
-save_dataset()
+//save_dataset()
 
 
-router.get('/search', (req, res) => {
-    search(req.query.search_term).then(data => {
+app.get('/search', (req, res) => {
+    // get search term parameter
+    console.log(req.query)
+    search(req.query.searchterm).then(data => {
         res.send(data)
     })
+
+    // end point: /search?search_term=cat
 })
 
-router.get('/cat', (req, res) => {
+app.get('/cat', (req, res) => {
     get_cat(req.query.cat_id).then(data => {
         res.send(data)
     })
@@ -264,7 +282,7 @@ router.get('/cat', (req, res) => {
     })
 })
 
-router.get('/journals', (req, res) => {
+app.get('/journals', (req, res) => {
     get_journals(req.query.cat_id).then(data => {
         res.send(data)
     })
@@ -274,7 +292,7 @@ router.get('/journals', (req, res) => {
     })
 })
 
-router.get('/update_dataset', (req, res) => {
+app.get('/update_dataset', (req, res) => {
     save_dataset().then(data => {
         res.sendStatus(200)
     })
@@ -290,3 +308,12 @@ module.exports = {
     get_cat: get_cat,
     get_journals: get_journals
 }
+
+
+// start server
+// const PORT = 3000
+// app.listen(PORT, () => {
+//     console.log(`Server running on localhost:${PORT}`)
+// })
+
+save_dataset()
