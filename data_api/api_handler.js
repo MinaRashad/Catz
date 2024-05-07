@@ -12,6 +12,17 @@ const app = express();
 const json = require('json');
 const fs = require('fs');
 
+// allow CORS
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // Allow specified HTTP methods
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specified headers
+    res.setHeader('Access-Control-Allow-Credentials', true); // Allow credentials like cookies (if applicable)
+    next();
+});
+
+
+
 // get config.json
 const config = require('./config.json');
 
@@ -74,7 +85,7 @@ function login() {
 
 function save_dataset(){
     return new Promise((resolve,reject)=>{
-        const FILENAME = 'available_cats.json'
+        const FILENAME = './available_cats.json'
         // check if dataset exists
         login().then(login_creds => {
             request.post(base_url,{
@@ -85,7 +96,7 @@ function save_dataset(){
                     "objectAction": "search",
                     "search": {
                         "resultStart": 0,
-                        "resultLimit":300,
+                        "resultLimit":800,
                         "resultSort": "animalCreatedDate",
                         "resultOrder": "asc",
                         "filters": [
@@ -311,9 +322,7 @@ module.exports = {
 
 
 // start server
-// const PORT = 3000
-// app.listen(PORT, () => {
-//     console.log(`Server running on localhost:${PORT}`)
-// })
-
-save_dataset()
+const PORT = 3000
+app.listen(PORT, () => {
+    console.log(`Server running on localhost:${PORT}`)
+})

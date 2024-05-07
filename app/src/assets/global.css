@@ -1,0 +1,17 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color:cornsilk;
+    color:#2B193D;
+}
+
+/* color pallete?
+--cornsilk: #fff7deff;
+--ebony: #5f634fff;
+--dark-purple: #2b193dff;
+--delft-blue: #2c365eff;
+--rosy-brown: #c5979dff;
+
+*/
