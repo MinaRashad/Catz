@@ -3,6 +3,9 @@
     <div class="search">
       <input type="text" v-model="search" :placeholder="placeholder" @input="callback(search)"/>
       <button @click="search = ''">Clear</button>
+      <slot>
+        <!-- here goes the other buttons -->
+      </slot>
     </div>
   </template>
 

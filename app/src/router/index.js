@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import SearchCats from "../views/SearchCats.vue";
 import testRouter from "../views/testRouter.vue";
 import CatPage from "../views/CatPage.vue";
+import SearchCatsCopy from "../views/SearchCatsCopy.vue";
+import ConfirmCopy from "../views/ConfirmCopy.vue";
 
 const routes = [
     {
@@ -16,11 +18,22 @@ const routes = [
     },
     //we need a dynamic route for cat id /cat_id
     {
-        path: "/cat/:id",
+        path: "/cat",
         name: "catDetails",
         component: CatPage,
         props: true
     },
+    {
+        path: "/copyJournal/selectCats",
+        name: "selectCopyCats",
+        component: SearchCatsCopy,
+        props: true
+    },
+    {
+        path: "/copyJournal/Confirm",
+        name: "ConfirmCopy",
+        component: ConfirmCopy
+    }
 ];
 
 const router = createRouter({

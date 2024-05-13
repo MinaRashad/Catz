@@ -5,9 +5,7 @@
             <h1>{{ '<<' }}</h1>
     </RouterLink>
     <div class="controls">
-        <RouterLink to="/">
-            <button>Copy Journals to other cats</button>
-        </RouterLink>
+        
         <RouterLink to="/">
             <button>Upload Files</button>
         </RouterLink>
@@ -21,17 +19,11 @@
   
 
     <h1>Journals</h1>
-    <div class="controls">
-        <RouterLink to="/">
-            <button>Create Google Doc</button>
-        </RouterLink>
-
-        <RouterLink to="/">
-                <button>Download as pdf</button>
-        </RouterLink>
-    </div>
     
-    <journals :cat_id="id" />
+    <div v-if="loadingJournals">Loading...</div>
+    <div v-else>
+        <journals :journals="journals" />
+    </div>
 </template>
 
 <script>
@@ -42,12 +34,6 @@
         name: 'CatPage',
         components: {
             journals
-        },
-        props: {
-            id: {
-                type: Number,
-                required: true
-            }
         },
         computed: {
             cat() {
@@ -61,17 +47,49 @@
                 
             }
         },
+        mounted() {
+            this.getJournals();
+        },
         data() {
             return {
-                loading: false
+                loadingJournals: true,
+                jorunals: []
             }
         },
+        methods:{
+            getJournals() {
+                fetch(`http://localhost:3000/journals?cat_id=${this.cat['animalID']}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.journals = data;
+                    
+                    // sort them by type
+
+                    this.journals.sort((a, b) => {
+                        if (a.journalEntrytypeDescription < b.journalEntrytypeDescription) {
+                            return -1;
+                        }
+                        if (a.journalEntrytypeDescription > b.journalEntrytypeDescription) {
+                            return 1;
+                        }
+                    });
+
+                    return data;
+
+                })
+                .then((data) => {
+                    this.loadingJournals = false;
+                    console.log(data);
+
+                })
+            }
+        }
         
     }
 
 </script>
 
-<style scoped>
+<style>
     img {
         width: 20vw;
         height: auto;

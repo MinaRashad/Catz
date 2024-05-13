@@ -1,12 +1,10 @@
 <template>
-    <RouterLink :to="{name:'catDetails', params:{id:cat.animalID}}" @click="passCat">
 
-        <div class="cat-card">
+        <div class="cat-card"  @click="passCat">
                 <img :src="img" :alt="cat.animalName" />
                 <h2>{{ cat.animalName }}</h2>
-                <h3>{{ cat.animalSex }} {{ cat.animalBreed }}</h3>
+                <h3>{{ cat.animalGeneralAge }} {{ cat.animalSex }} {{ cat.animalBreed }}</h3>
         </div>
-    </RouterLink>
 
 
 </template>
@@ -24,6 +22,7 @@ cat object keys returned by API
     "animalName",
     "animalOthernames",
     "animalSpecies",
+    "animalGeneralAge"
     "animalSex",
     "animalStatus",
     "animalBreed",
@@ -57,11 +56,19 @@ export default {
         cat: {
             type: Object,
             required: true
+        },
+        pass: {
+            type: Boolean,
+            required: false
         }
     },
     methods: {
         passCat() {
-            sessionStorage.setItem('cat', JSON.stringify(this.cat));
+            console.log(this.pass)
+            if (this.pass) {
+                sessionStorage.setItem('cat', JSON.stringify(this.cat));
+            }
+            
         }
     },
     computed: {
@@ -86,6 +93,8 @@ export default {
     background-color: #C5979D;
     box-shadow: 3px 3px 1px 1px #000000;
     width: 10vw;
+    text-decoration: none;
+    color: black;
 }
 
 .cat-card img {
@@ -104,12 +113,7 @@ export default {
     text-align: center;
 }
 
-a{
-    text-decoration: none;
-    color: black;
-}
-
-a:hover{
+.cat-card:hover{
     color: #533f42;
 }
 

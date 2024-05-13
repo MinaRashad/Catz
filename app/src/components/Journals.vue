@@ -1,8 +1,20 @@
 <template>
     <div>
-        <h1 v-show="loading">Loading journals for cat {{ cat_id }}...</h1>
-        <table v-if="!loading">
+        <div class="controls">
+            <RouterLink to="/">
+                <button>Create Google Doc</button>
+            </RouterLink>
+
+            <RouterLink to="/">
+                    <button>Download as pdf</button>
+            </RouterLink>
+
+
+            <button @click="saveCheckedJournals">Copy Journals to other cats</button>
+        </div>
+        <table v-if="journals.length>0">
             <tr>
+                <th>copy?</th>
                 <th>ID</th>
                 <th>Type</th>
                 <th>Comment</th>
@@ -10,6 +22,10 @@
                 <th>Due Date</th>
             </tr>
             <tr v-for="journal in journals" :key="journal.journalEntryID">
+                <td><input type="checkbox" @click="()=>{
+                    if(journal.checked === undefined) journal.checked = true;
+                    else journal.checked = !journal.checked;
+                }"></td>
                 <td>{{ journal.journalEntryID }}</td>
                 <td>{{ journal.journalEntrytypeDescription }}</td>
                 <td>{{ journal.journalEntryComment }}</td>
@@ -17,6 +33,7 @@
                 <td>{{ journal.journalEntryDueDate }}</td>
             </tr>
         </table>
+        
     </div>
 </template>
 
@@ -32,44 +49,26 @@
 
     export default {
         name: 'CatJournals',
-        data() {
-            return {
-                journals: [],
-                loading: false
-            }
-        },
         props: {
-            cat_id: {
-                type: Number,
-                required: true
+            journals: {
+                type: Array,
+                default: () => [],
             }
-        },
-        mounted() {
-            this.getJournals();
         },
         methods: {
-            getJournals() {
-                this.loading = true;
+            saveCheckedJournals() {
+                // get all checked journals
+                
+                let checkedJournals = this.journals.filter(journal => journal.checked);
 
-                fetch(`http://localhost:3000/journals?cat_id=${this.cat_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    this.journals = data;
-                    this.loading = false;
-                    
-                    // sort them by type
-
-                    this.journals.sort((a, b) => {
-                        if (a.journalEntrytypeDescription < b.journalEntrytypeDescription) {
-                            return -1;
-                        }
-                        if (a.journalEntrytypeDescription > b.journalEntrytypeDescription) {
-                            return 1;
-                        }
-                    });
-
-
-                })
+                sessionStorage.setItem('checkedJournals', JSON.stringify(checkedJournals));
+            
+                if(checkedJournals.length === 0) {
+                    alert('No journals selected');
+                } else {
+                    // route to the copy journals page
+                    this.$router.push({ name: 'selectCopyCats' });
+                }
             }
         },
     }

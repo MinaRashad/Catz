@@ -32,6 +32,8 @@ const username = config.RESCUE_GROUPS_USERNAME
 const password = config.RESCUE_GROUPS_PASSWORD
 const account_number = config.RESCUE_GROUPS_ACCOUNT_NUMBER
 
+// login_creds
+let login_creds = null
 
 /**
  * Login function
@@ -46,6 +48,10 @@ const account_number = config.RESCUE_GROUPS_ACCOUNT_NUMBER
 
 function login() {
     return new Promise((resolve,reject)=>{
+        if (login_creds) {
+            resolve(login_creds)
+            return
+        }
         request.post(base_url,{
                 json: {
                     "username": username,
@@ -61,6 +67,8 @@ function login() {
                 }
                 console.log(username, password, account_number) 
                 if(body['data']['token']) console.log(`Login successful. Token: ${body['data']['token']}`)
+                
+                login_creds = body['data']
                 resolve(body['data'])
         })
     })
@@ -119,15 +127,21 @@ function save_dataset(){
                                 fieldName: "animalStatus",
                                 operation: "equals",
                                 criteria: "Pending"
+                            },
+                            {
+                                fieldName: "animalName",
+                                operation: "contains",
+                                criteria: "Courtesy Post"
                             }
                                                     
                         ],
-                        "filterProcessing": "1 AND (2 OR 3 OR 4)",
+                        "filterProcessing": "1 AND NOT 5 AND (2 OR 3 OR 4)",
                         "fields": ["animalID",
                                 "animalName",
                                 "animalOthernames",
                                 "animalSpecies",
                                 "animalSex",
+                                "animalGeneralAge",
                                 "animalStatus",
                                 "animalBreed",
                                 "animalColor",
@@ -156,6 +170,7 @@ function save_dataset(){
         })
         .catch((error) => {
             console.error(error)
+            login_creds = null
             reject(error)
         })
     })
@@ -192,15 +207,24 @@ function search(search_term){
         read_dataset().then(data => {
             // turn data json into array
             data = Object.values(data)
-            let filtered_data = data.filter((cat) => {
-                // search all fields for search term
-                for (const [key, value] of Object.entries(cat)) {
-                    if ( typeof value === 'string' && value.toLowerCase().includes(search_term.toLowerCase())) return true
-                }
+            let terms = search_term.split(';')
+            // remove last term if length is larger than 1 and last term is empty
+            if (terms.length > 1 && terms[terms.length-1] === '') terms.pop()
 
-                
+            let filtered_data = data
 
+            // filter data
+            terms.forEach(term => {
+                filtered_data = filtered_data.filter((cat) => {
+                    // search all fields for search term
+                        for (const [key, value] of Object.entries(cat)) {
+                            if ( typeof value === 'string' && value.toLowerCase().includes(term)) return true
+                        }
+    
+                        return false
                 })
+            })
+            
             resolve(filtered_data)
         })
         .catch((error) => {
@@ -264,6 +288,7 @@ function get_journals(cat_id){
         })
         .catch((error) => {
             console.error(error)
+            login_creds = null
             reject(error)
         })
     })
