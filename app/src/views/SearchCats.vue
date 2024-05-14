@@ -48,8 +48,10 @@
 
             this.searching = true;
             
-            // fetch with CORS disabled
-            fetch(`http://localhost:3000/search?searchterm=${search}`)
+            const url = new URL(window.location.href);
+            const BASE_URL = `${url.protocol}//${url.hostname}`;
+
+            fetch(`${BASE_URL}:3000/search?searchterm=${search}`)
             .then(response => response.json())
             .then(data => {
                 this.cats = data;

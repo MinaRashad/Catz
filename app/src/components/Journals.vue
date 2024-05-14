@@ -1,16 +1,16 @@
 <template>
     <div>
         <div class="controls">
-            <RouterLink to="/">
+            <RouterLink to="/" v-show="showButtons">
                 <button>Create Google Doc</button>
             </RouterLink>
 
-            <RouterLink to="/">
+            <RouterLink to="/" v-show="showButtons">
                     <button>Download as pdf</button>
             </RouterLink>
 
 
-            <button @click="saveCheckedJournals">Copy Journals to other cats</button>
+            <button @click="saveCheckedJournals" v-show="showButtons">Copy Journals to other cats</button>
         </div>
         <table v-if="journals.length>0">
             <tr>
@@ -22,7 +22,7 @@
                 <th>Due Date</th>
             </tr>
             <tr v-for="journal in journals" :key="journal.journalEntryID">
-                <td><input type="checkbox" @click="()=>{
+                <td v-if="showButtons"><input type="checkbox" @click="()=>{
                     if(journal.checked === undefined) journal.checked = true;
                     else journal.checked = !journal.checked;
                 }"></td>
@@ -53,6 +53,10 @@
             journals: {
                 type: Array,
                 default: () => [],
+            },
+            showButtons: {
+                type: Boolean,
+                default: () => true,
             }
         },
         methods: {

@@ -6,7 +6,7 @@
         <div class='controls'>
 
             <button @click="selected = []">Clear all</button>
-            <button @click="selected = []">Next</button>
+            <button @click="SaveSelectedCats">Next</button>
             <button @click="()=>{
                 this.$router.push('/cat');
             
@@ -69,14 +69,25 @@
             // when the api returns data, set searching to false
 
             this.searching = true;
+
+            const url = new URL(window.location.href);
+            const BASE_URL = `${url.protocol}//${url.hostname}`;
+
+
             
             // fetch with CORS disabled
-            fetch(`http://localhost:3000/search?searchterm=${search}`)
+            fetch(`${BASE_URL}:3000/search?searchterm=${search}`)
             .then(response => response.json())
             .then(data => {
                 this.cats = data;
                 this.searching = false;
             })
+            },
+        SaveSelectedCats() {
+            // save the selected cats to session storage
+            // route to the confirm copy page
+            sessionStorage.setItem('selectedCats', JSON.stringify(this.selected));
+            this.$router.push({ name: 'ConfirmCopy' });
             }
         }
     }

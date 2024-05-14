@@ -58,7 +58,12 @@
         },
         methods:{
             getJournals() {
-                fetch(`http://localhost:3000/journals?cat_id=${this.cat['animalID']}`)
+                // to make it dynamic with any current domain
+                const url = new URL(window.location.href);
+                const BASE_URL = `${url.protocol}//${url.hostname}`;
+
+
+                fetch(`${BASE_URL}:3000/journals?cat_id=${this.cat['animalID']}`)
                 .then(response => response.json())
                 .then(data => {
                     this.journals = data;

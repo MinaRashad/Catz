@@ -12,19 +12,24 @@ const app = express();
 const json = require('json');
 const fs = require('fs');
 
-// allow CORS
+// // allow CORS
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+    // allow from localhost:8080 only
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+    // res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // Allow specified HTTP methods
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specified headers
     res.setHeader('Access-Control-Allow-Credentials', true); // Allow credentials like cookies (if applicable)
     next();
 });
 
+app.use(express.json());
+
 
 
 // get config.json
 const config = require('./config.json');
+const { type } = require('os');
 
 const base_url = config.BASE_URL
 const api_key = config.API_KEY
@@ -270,11 +275,11 @@ function get_journals(cat_id){
                             }
                         ],
                         "fields": [
-                            "journalEntryID",
-                            "journalEntryDate",
-                            "journalEntryComment",
-                            "journalEntrytypeDescription",
-                            "journalEntryDueDate"
+                            "journalEntryID", "journalEntryAnimalID", "journalEntryDate", 
+                            "journalEntryComment", "journalEntryEntrytypeID","journalEntrytypeDescription", 
+                            "journalEntrytypeCategoryID", "journalEntrytypeCategoryName", "journalEntryCost",
+                            "journalEntryDueDate", "journalEntryReminderDate", "journalEntryReminderContactID",
+                            "journalEntryReminderContactName"
                         ]
                     }
                 }
@@ -294,8 +299,45 @@ function get_journals(cat_id){
     })
 }
 
+/**
+ * @function upload_journal
+ * 
+ * @param {Object} journal_data
+ * 
+ * @description This function uploads a journal entry
+ * 
+ * @returns 200 if successful, 500 if not
+ */
 
-//save_dataset()
+function upload_journal(journal_data){
+    login().then(login_creds => {
+        request.post(base_url,{
+            json: {
+                "token": login_creds['token'],
+                "tokenHash": login_creds['tokenHash'],
+                "objectType": "animalsJournalEntries",
+                "objectAction": "add",
+                "values": [
+                    {
+                        "journalEntryAnimalID": journal_data['journalEntryAnimalID'],
+                        "journalEntryDate": journal_data['journalEntryDate'],
+                        "journalEntryComment": journal_data['journalEntryComment'],
+                        "journalEntryEntrytypeID": journal_data['journalEntryEntrytypeID'],
+                        "journalEntryCost":  journal_data['journalEntryCost'],
+                        "journalEntryDueDate": journal_data['journalEntryDueDate'],
+                        "journalEntryReminderDate": journal_data['journalEntryReminderDate'],
+                    }
+                ]
+            }
+        }, (error, response, body) => {
+            if (error) {
+                console.error(error)
+                return 500
+            }
+            return 200
+        })      
+    })
+}
 
 
 app.get('/search', (req, res) => {
@@ -336,6 +378,14 @@ app.get('/update_dataset', (req, res) => {
         console.error(error)
         res.sendStatus(500)
     })
+})
+
+// post journal entry
+app.post('/journal', (req, res) => {
+    journal_data = req.body
+    upload_journal(journal_data)
+    console.log("Uploaded journal entry:" + journal_data)
+    res.sendStatus(200)
 })
 
 module.exports = {
