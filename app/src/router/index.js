@@ -4,6 +4,8 @@ import testRouter from "../views/testRouter.vue";
 import CatPage from "../views/CatPage.vue";
 import SearchCatsCopy from "../views/SearchCatsCopy.vue";
 import ConfirmCopy from "../views/ConfirmCopy.vue";
+import CatFiles from "../views/CatFiles.vue";
+import CatUpload from "../views/CatUpload.vue";
 
 const routes = [
     {
@@ -24,6 +26,16 @@ const routes = [
         props: true
     },
     {
+        path: "/files",
+        name: "files",
+        component: CatFiles
+    },
+    {
+        path: "/upload",
+        name: "uploadFiles",
+        component: CatUpload
+    },
+    {
         path: "/copyJournal/selectCats",
         name: "selectCopyCats",
         component: SearchCatsCopy,
@@ -33,7 +45,7 @@ const routes = [
         path: "/copyJournal/Confirm",
         name: "ConfirmCopy",
         component: ConfirmCopy
-    }
+    },
 ];
 
 const router = createRouter({

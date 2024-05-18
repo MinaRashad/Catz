@@ -30,6 +30,7 @@ app.use(express.json());
 // get config.json
 const config = require('./config.json');
 const { type } = require('os');
+const { log } = require('console');
 
 const base_url = config.BASE_URL
 const api_key = config.API_KEY
@@ -220,13 +221,19 @@ function search(search_term){
 
             // filter data
             terms.forEach(term => {
+                let not_indicator = term.startsWith('-')
+                if (not_indicator) term = term.replace('-','')
                 filtered_data = filtered_data.filter((cat) => {
                     // search all fields for search term
                         for (const [key, value] of Object.entries(cat)) {
-                            if ( typeof value === 'string' && value.toLowerCase().includes(term)) return true
+                                                        
+                            if ( typeof value === 'string' && value.toLowerCase().includes(term.toLowerCase())) {
+                                return !not_indicator // if not indicator is present, return false
+                            }
+                            
                         }
     
-                        return false
+                        return not_indicator // if not indicator is present, return true
                 })
             })
             
@@ -252,6 +259,16 @@ function get_cat(cat_id){
         })
     })
 }
+
+/**
+ * @function get_journals
+ * 
+ * @param {Number} cat_id
+ * 
+ * @returns {Promise} with journal entries
+ * 
+ * This function retrieves journal entries for a cat
+ * */
 
 function get_journals(cat_id){
     return new Promise((resolve,reject)=>{
@@ -279,7 +296,7 @@ function get_journals(cat_id){
                             "journalEntryComment", "journalEntryEntrytypeID","journalEntrytypeDescription", 
                             "journalEntrytypeCategoryID", "journalEntrytypeCategoryName", "journalEntryCost",
                             "journalEntryDueDate", "journalEntryReminderDate", "journalEntryReminderContactID",
-                            "journalEntryReminderContactName"
+                            "journalEntryReminderContactName", "animalNotes", "animalOrigin"
                         ]
                     }
                 }
@@ -298,6 +315,8 @@ function get_journals(cat_id){
         })
     })
 }
+
+
 
 /**
  * @function upload_journal
@@ -339,6 +358,54 @@ function upload_journal(journal_data){
     })
 }
 
+/**
+ * @function get_files
+ * 
+ * @param {Number} cat_id
+ * 
+ * @returns {Promise} with files
+ */
+
+function get_files(cat_id){
+    return new Promise((resolve,reject)=>{
+        login().then(login_creds => {
+            request.post(base_url,{
+                json: {
+                    "token": login_creds['token'],
+                    "tokenHash": login_creds['tokenHash'],
+                    "objectType": "animalFiles",
+                    "objectAction": "search",
+                    "search": {
+                        "resultStart": 0,
+                        "resultLimit":200,
+                        "resultSort": "animalfileID",
+                        "resultOrder": "asc",
+                        "filters": [
+                            {
+                                "fieldName": "animalfileAnimalID",
+                                "operation": "equals",
+                                "criteria": cat_id
+                            }
+                        ],
+                        "fields": [
+                            'animalfileAnimalID',"animalfileID", "animalfileOldName", "animalfileDescription",
+                            "animalfileStatus", "animalfileDisplayInline", "animalfilePublic",
+                            "animalfileSize", "animalfileCreatedDate"
+                        ]
+                    }
+                }
+            }, (error, response, body) => {
+                if (error) {
+                    console.error(error)
+                    return error
+                }
+                console.log(response.statusCode == 200 ? 'Files retrieved successfully' : 'Error retrieving files')
+                resolve(Object.values(body['data']))
+            })  
+        })
+    })
+}
+// routes
 
 app.get('/search', (req, res) => {
     // get search term parameter
@@ -388,13 +455,22 @@ app.post('/journal', (req, res) => {
     res.sendStatus(200)
 })
 
-module.exports = {
-    router: router,
-    search: search,
-    get_cat: get_cat,
-    get_journals: get_journals
-}
+app.get('/files', (req, res) => {
+    get_files(req.query.cat_id).then(data => {
+        res.send(data)
+    })
+    .catch((error) => {
+        console.error(error)
+        res.sendStatus(500)
+    })
+})
 
+
+// check if dataset exists
+const FILENAME = 'available_cats.json'
+if (!fs.existsSync(FILENAME)) {
+    save_dataset()
+}
 
 // start server
 const PORT = 3000

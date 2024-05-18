@@ -3,3 +3,5 @@ data_api/config_copy.json
 data_api/available_cats.json
 data_api/node_modules/
 node_modules
+*.pdf
+*.json

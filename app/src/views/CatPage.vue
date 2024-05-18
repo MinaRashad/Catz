@@ -6,14 +6,17 @@
     </RouterLink>
     <div class="controls">
         
-        <RouterLink to="/">
+        <RouterLink to="/upload">
             <button>Upload Files</button>
+        </RouterLink>
+        <RouterLink :to="{name:'files'}">
+            <button>Browse Files</button>
         </RouterLink>
 
     </div>
     <div>
         <img :src="img">
-        <h1>{{ cat.animalName }} {{ cat.animalOthernames?`(also ${cat.animalOthernames})`:'' }}</h1>
+        <h1>{{ cat.animalName }}</h1>
         <h2>{{ cat.animalSex }} - {{ cat.animalBreed }} - {{ cat.animalStatus }} </h2>
     </div>
   
