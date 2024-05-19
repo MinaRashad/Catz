@@ -12,6 +12,12 @@ const app = express();
 const json = require('json');
 const fs = require('fs');
 
+
+// Increase the limit
+app.use(express.json({limit: '100mb'}));
+app.use(express.urlencoded({limit: '100mb', extended: true}));
+
+
 // // allow CORS
 app.use((req, res, next) => {
     // allow from localhost:8080 only
@@ -405,7 +411,98 @@ function get_files(cat_id){
         })
     })
 }
-// routes
+
+/**
+ * @function upload_file
+ * 
+ * @param {Number} cat_id
+ * @param {Object} file - file object with file name and data
+ * 
+ * 
+ * @returns 200 if successful, 500 if not
+ */
+
+function upload_file(cat_id, file){
+    return new Promise((resolve,reject)=>{
+        login().then(login_creds => {
+            request.post(base_url,{
+                json: {
+                    "token": login_creds['token'],
+                    "tokenHash": login_creds['tokenHash'],
+                    "objectType": "animalFiles",
+                    "objectAction": "add",
+                    "values": [
+                        {
+                            "animalfileAnimalID":cat_id,
+                            "animalfileBinary":file.base64,
+                            "animalfileOldFileName":file.name,
+                            "animalfileDescription":"Mass upload",
+                            "animalfileStatus":"Active",
+                            "animalfileDisplayInline":"Yes",
+                            "animalfilePublic":"No"
+                        }
+                    ]
+                    
+                }
+            }, (error, response, body) => {
+                if (error) {
+                    console.error(error)
+                    return error
+                }
+                console.log(response.statusCode == 200 ? 'File Uploaded successfully' : 'Error uploading file')
+                resolve(body['data'])
+            })  
+        })
+    })
+}
+
+/**
+ * @function upload_picture
+ * 
+ * @param {Number} cat_id
+ * @param {Object} picture - picture object with file name and data
+ * 
+ * @returns 200 if successful, 500 if not
+ */
+
+function upload_picture(cat_id, picture){
+
+    let timestamp = new Date().getTime()
+    picture.name = `${timestamp}_${picture.name}`
+    console.log(cat_id, picture.name)
+
+    return new Promise((resolve,reject)=>{
+        login().then(login_creds => {
+            request.post(base_url,{
+                json: {
+                    "token": login_creds['token'],
+                    "tokenHash": login_creds['tokenHash'],
+                    "objectType": "animals",
+                    "objectAction": "addPicture",
+                    "values": [
+                        {
+                            "animalID":cat_id,
+                            "pictureBinary":picture.base64,
+                            "fileName": picture.name,
+                            "mediaOrder": 2
+                        }
+                    ]
+                }
+            }, (error, response, body) => {
+                if (error) {
+                    console.error(error)
+                    return error
+                }
+                resolve(body['data'])
+            })
+        }
+    )
+    })
+}
+
+// ********************************************* //
+// *************** API ENDPOINTS *************** //
+// ********************************************* //
 
 app.get('/search', (req, res) => {
     // get search term parameter
@@ -465,6 +562,31 @@ app.get('/files', (req, res) => {
     })
 })
 
+app.post('/file', async (req, res) => {
+    // get cat id
+    cat_id = req.body.cat_id
+
+    // get file
+    file = req.body.file
+
+    // determine type
+    if(file.type === 'image'){
+
+        let response = await upload_picture(cat_id, file)
+        
+        // let _ = await wait(1000)
+
+        res.send(response)
+    }
+    else{
+        console.log(cat_id,file)
+        upload_file(cat_id, file).then(data => {
+            res.send(data)
+        })
+    }
+})
+
+
 
 // check if dataset exists
 const FILENAME = 'available_cats.json'
@@ -477,3 +599,13 @@ const PORT = 3000
 app.listen(PORT, () => {
     console.log(`Server running on localhost:${PORT}`)
 })
+
+
+
+//********* QUICK fix ***********/
+
+function wait(ms){
+    return new Promise((resolve,reject)=>{
+        setTimeout(resolve,ms)
+    })
+}

@@ -87,6 +87,8 @@ export default {
                 .then(data => {
                     this.loadingFiles = false;
                     this.files = data;
+                    console.log(this.files[0]);
+
                 })
                 .catch(error => {
                     console.error('Error:', error);
