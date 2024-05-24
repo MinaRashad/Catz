@@ -15,18 +15,24 @@
         <table v-if="journals.length>0">
             <tr>
                 <th>copy?</th>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Comment</th>
-                <th>Date</th>
-                <th>Due Date</th>
+        <th @click="sortBy('journalEntrytypeDescription')">
+          Type <span>{{ sortIcon('journalEntrytypeDescription') }}</span>
+        </th>
+        <th @click="sortBy('journalEntryComment')">
+          Comment <span>{{ sortIcon('journalEntryComment') }}</span>
+        </th>
+        <th @click="sortBy('journalEntryDate')">
+          Date <span>{{ sortIcon('journalEntryDate') }}</span>
+        </th>
+        <th @click="sortBy('journalEntryDueDate')">
+          Due Date <span>{{ sortIcon('journalEntryDueDate') }}</span>
+        </th>
             </tr>
-            <tr v-for="journal in journals" :key="journal.journalEntryID">
+            <tr v-for="journal in sortedJournals" :key="journal.journalEntryID">
                 <td v-if="showButtons"><input type="checkbox" @click="()=>{
                     if(journal.checked === undefined) journal.checked = true;
                     else journal.checked = !journal.checked;
                 }"></td>
-                <td>{{ journal.journalEntryID }}</td>
                 <td>{{ journal.journalEntrytypeDescription }}</td>
                 <td>{{ journal.journalEntryComment }}</td>
                 <td>{{ journal.journalEntryDate }}</td>
@@ -59,6 +65,22 @@
                 default: () => true,
             }
         },
+        computed: {
+            sortedJournals(){
+                console.log(this.sortJournals)
+                if(this.sortByKey){
+                    return this.sortJournals(this.journals, this.sortByKey, this.sortAscending);
+                } else {
+                    return this.journals;
+                }
+            }
+        },
+        data() {
+            return {
+                sortByKey: null,
+                sortAscending: true,
+            };
+        },
         methods: {
             saveCheckedJournals() {
                 // get all checked journals
@@ -73,8 +95,49 @@
                     // route to the copy journals page
                     this.$router.push({ name: 'selectCopyCats' });
                 }
+            },
+            sortBy(key) {
+                if (this.sortByKey === key) {
+                    this.sortAscending = !this.sortAscending;
+                } else {
+                    this.sortByKey = key;
+                    this.sortAscending = true;
+                }
+                },
+
+            sortIcon(key) {
+                if (this.sortByKey !== key) return '▲';
+                return this.sortAscending ? '▼' : '▲';
+            },
+
+            sortJournals(journals, key, ascending = true) {
+                journals.sort((a, b) => {
+                    const valueA = a[key];
+                    const valueB = b[key];
+
+                    // Handle date comparison
+                    if (key.toLowerCase().includes("date")) {
+                    const dateA = new Date(valueA);
+                    const dateB = new Date(valueB);
+                    return ascending ? dateA - dateB : dateB - dateA;
+                    }
+
+                    // Handle string comparison (case-insensitive)
+                    if (typeof valueA === 'string' && typeof valueB === 'string') {
+                    const lowerA = valueA.toLowerCase();
+                    const lowerB = valueB.toLowerCase();
+                    return ascending ? lowerA.localeCompare(lowerB) : lowerB.localeCompare(lowerA);
+                    }
+
+                    // Handle general comparison
+                    return ascending ? valueA - valueB : valueB - valueA;
+                });
+
+                return journals; // Return the sorted array (optional)
             }
-        },
+        
+        }
+
     }
 </script>
 
@@ -91,7 +154,8 @@
         text-align: left;
     }
 
-    th {
-        background-color: #f2f2f2;
+    th span{
+        cursor: pointer;
     }
+
 </style>
