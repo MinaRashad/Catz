@@ -112,21 +112,24 @@
 
             sortJournals(journals, key, ascending = true) {
                 journals.sort((a, b) => {
-                    const valueA = a[key];
-                    const valueB = b[key];
+                    let valueA = a[key];
+                    let valueB = b[key];
+
+                    valueA = valueA || 1e14;
+                    valueB = valueB || 1e14;
 
                     // Handle date comparison
                     if (key.toLowerCase().includes("date")) {
-                    const dateA = new Date(valueA);
-                    const dateB = new Date(valueB);
-                    return ascending ? dateA - dateB : dateB - dateA;
+                        const dateA = new Date(valueA);
+                        const dateB = new Date(valueB);
+                        return ascending ? dateA - dateB : dateB - dateA;
                     }
 
                     // Handle string comparison (case-insensitive)
                     if (typeof valueA === 'string' && typeof valueB === 'string') {
-                    const lowerA = valueA.toLowerCase();
-                    const lowerB = valueB.toLowerCase();
-                    return ascending ? lowerA.localeCompare(lowerB) : lowerB.localeCompare(lowerA);
+                        const lowerA = valueA.toLowerCase();
+                        const lowerB = valueB.toLowerCase();
+                        return ascending ? lowerA.localeCompare(lowerB) : lowerB.localeCompare(lowerA);
                     }
 
                     // Handle general comparison
