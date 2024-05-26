@@ -14,15 +14,15 @@
         </div>
         <table v-if="journals.length>0">
             <tr>
-                <th>copy?</th>
+                <th v-if="showButtons" >copy?</th>
+        <th @click="sortBy('journalEntryDate')">
+          Date <span>{{ sortIcon('journalEntryDate') }}</span>
+        </th>
         <th @click="sortBy('journalEntrytypeDescription')">
           Type <span>{{ sortIcon('journalEntrytypeDescription') }}</span>
         </th>
         <th @click="sortBy('journalEntryComment')">
           Comment <span>{{ sortIcon('journalEntryComment') }}</span>
-        </th>
-        <th @click="sortBy('journalEntryDate')">
-          Date <span>{{ sortIcon('journalEntryDate') }}</span>
         </th>
         <th @click="sortBy('journalEntryDueDate')">
           Due Date <span>{{ sortIcon('journalEntryDueDate') }}</span>
@@ -33,10 +33,10 @@
                     if(journal.checked === undefined) journal.checked = true;
                     else journal.checked = !journal.checked;
                 }"></td>
-                <td>{{ journal.journalEntrytypeDescription }}</td>
-                <td>{{ journal.journalEntryComment }}</td>
-                <td>{{ journal.journalEntryDate }}</td>
-                <td>{{ journal.journalEntryDueDate }}</td>
+            <td>{{ journal.journalEntryDate }}</td>
+            <td>{{ journal.journalEntrytypeDescription }}</td>
+            <td>{{ journal.journalEntryComment }}</td>
+            <td>{{ journal.journalEntryDueDate }}</td>
             </tr>
         </table>
         
