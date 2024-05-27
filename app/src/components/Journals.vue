@@ -1,13 +1,17 @@
 <template>
     <div>
         <div class="controls">
-            <RouterLink to="/" v-show="showButtons">
-                <button>Create Google Doc</button>
-            </RouterLink>
+            <span to="/" v-show="showButtons">
+                <button @click="getGoogleDoc">Create Google Doc</button>
+            </span>
 
-            <RouterLink to="/" v-show="showButtons">
+            <!-- <RouterLink to="/" v-show="showButtons">
                     <button>Download as pdf</button>
             </RouterLink>
+
+            <span v-show="showButtons" @click="copyMedicalData">
+                    <button>Copy Medical Data</button>
+            </span> -->
 
 
             <button @click="saveCheckedJournals" v-show="showButtons">Copy Journals to other cats</button>
@@ -73,7 +77,21 @@
                 } else {
                     return this.journals;
                 }
-            }
+            },
+            medicalJournals() {
+                let MedicalJournalTypes = ['De Wormer', 'FVRCP', "Rabies", "Spay", "Neuter",
+                    "Flea", "Microchip", "FIV", "FeLV", "Medical"
+                ]
+                return this.journals.filter(journal =>{
+                    for(let type of MedicalJournalTypes){
+                        if(journal.journalEntrytypeDescription.includes(type)){
+                            return true;
+                        }
+                    }
+                });
+
+            },
+
         },
         data() {
             return {
@@ -137,6 +155,18 @@
                 });
 
                 return journals; // Return the sorted array (optional)
+            },
+            getGoogleDoc() {
+                // use the previous API instead
+                const url = "http://volunteers.thedancingcat.org/export/export?id="
+                let cat = JSON.parse(sessionStorage.getItem('cat'));
+                let catId = cat.animalID;
+                let googleDocUrl = url + catId;
+
+                // open link in a new tab
+                window.open(googleDocUrl, '_blank');
+
+                
             }
         
         }
