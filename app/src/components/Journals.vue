@@ -2,7 +2,7 @@
     <div>
         <div class="controls">
             <span to="/" v-show="showButtons">
-                <button @click="getGoogleDoc">Create Google Doc</button>
+                <button @click="getGoogleDoc">Create Medical Record</button>
             </span>
 
             <!-- <RouterLink to="/" v-show="showButtons">
@@ -14,7 +14,8 @@
             </span> -->
 
 
-            <button @click="saveCheckedJournals" v-show="showButtons">Copy Journals to other cats</button>
+            <button @click="saveCheckedJournals" v-show="showButtons">Copy Journal Entries to other cats
+            </button>
         </div>
         <table v-if="journals.length>0">
             <tr>
@@ -177,8 +178,11 @@
 
 <style scoped>
     table {
-        width: 100%;
+        width: auto;
         border-collapse: collapse;
+        margin-left: 5em;
+        margin-right: 5em;
+        font-size: x-large;
     }
 
     th, td {

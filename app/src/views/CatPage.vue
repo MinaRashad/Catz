@@ -7,10 +7,10 @@
     <div class="controls">
         
         <RouterLink to="/upload">
-            <button>Upload Files</button>
+            <button>Upload photos/Files</button>
         </RouterLink>
         <RouterLink :to="{name:'files'}">
-            <button>Browse Files</button>
+            <button>Display Photos/files</button>
         </RouterLink>
 
     </div>
@@ -21,7 +21,7 @@
     </div>
   
 
-    <h1>Journals</h1>
+    <h1>Journal Entries</h1>
     
     <div v-if="loadingJournals">Loading...</div>
     <div v-else>

@@ -58,9 +58,7 @@ export default {
         cancelCopy() {
             sessionStorage.removeItem('checkedJournals');
             sessionStorage.removeItem('selectedCats');
-            sessionStorage.removeItem('cat');
-
-            this.$router.push({name: 'searchCats'});
+            this.$router.push({name: 'catDetails'});
         },
         async copyJournals() {
             console.log('Copying journals');
@@ -85,6 +83,11 @@ export default {
                     this.uploadProgress = Math.round((current / total) * 100);
                 }
             }
+
+            this.uploading = false;
+
+            // go to cat page
+            this.cancelCopy();
             
         },
         async upload_journal(data) {

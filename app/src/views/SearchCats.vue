@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <SearchBar placeholder="Write anything here" :callback="searchCats"/>
+        <SearchBar placeholder="write keywords" :callback="searchCats"/>
         <!-- update button -->
         <UpdateButton :handle="()=>this.searchCats('')" />
     </div>
