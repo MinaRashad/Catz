@@ -198,11 +198,20 @@ function save_dataset(){
  */
 
 function read_dataset(){
-    if(available_cats) return available_cats
     return new Promise((resolve,reject)=>{
+
+        if (available_cats) {
+            resolve(available_cats)
+            return
+        }
+        // re-reading because available_cats is null
+        console.log('re-reading dataset')
+
         const FILENAME = 'available_cats.json'
         fs.readFile(FILENAME, (err, data) => {
             if (err) throw err;
+            available_cats = JSON.parse(data)
+            console.log('dataset read successfully')
             resolve(JSON.parse(data))
         });
     })
