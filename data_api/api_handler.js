@@ -47,6 +47,8 @@ const account_number = config.RESCUE_GROUPS_ACCOUNT_NUMBER
 // login_creds
 let login_creds = null
 
+let available_cats = null
+
 /**
  * Login function
  * 
@@ -177,6 +179,7 @@ function save_dataset(){
                     console.log(Object.keys(data).length + ' cats saved to file successfully.');
                 });
 
+                available_cats = null // reset available_cats so it can be reloaded
                 resolve(data)
             })  
         })
@@ -195,6 +198,7 @@ function save_dataset(){
  */
 
 function read_dataset(){
+    if(available_cats) return available_cats
     return new Promise((resolve,reject)=>{
         const FILENAME = 'available_cats.json'
         fs.readFile(FILENAME, (err, data) => {
