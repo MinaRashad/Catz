@@ -1,9 +1,17 @@
 <template>
     <div>
         <div class="controls">
-            <span to="/" v-show="showButtons">
-                <button @click="getGoogleDoc">Create Medical Record</button>
+            <span v-show="showButtons">
+                <button @click="getGoogleDoc">Create Medical Record Doc</button>
             </span>
+
+            <RouterLink to="/medicalJournals" v-show="showButtons">
+                <button>Medical Journal Entries</button>
+            </RouterLink>
+
+            <RouterLink to="/journalUpload" v-show="showButtons">
+                <button>Upload Journal Entries</button>
+            </RouterLink>
 
             <!-- <RouterLink to="/" v-show="showButtons">
                     <button>Download as pdf</button>
@@ -60,6 +68,7 @@
 
     export default {
         name: 'CatJournals',
+
         props: {
             journals: {
                 type: Array,
@@ -193,6 +202,31 @@
 
     th span{
         cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+        width: 50px;
+        height: 50px;
+        /* make it stylish */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 2px solid #000000;
+        background-color: aliceblue;
+        border-radius: 5px;
+        cursor: pointer;
+
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #449d3c;
+        /* add check */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px"><path d="M1.73 12.91l6.37 6.37L22.79 4.59" /></svg>');
+        
+        background-size: 50%;
+        background-position: center;
+        background-repeat: no-repeat;
+
     }
 
 </style>

@@ -6,6 +6,9 @@ import SearchCatsCopy from "../views/SearchCatsCopy.vue";
 import ConfirmCopy from "../views/ConfirmCopy.vue";
 import CatFiles from "../views/CatFiles.vue";
 import CatUpload from "../views/CatUpload.vue";
+import MedicalJournals from "@/views/MedicalJournals.vue";
+import JournalUpload from "@/views/JournalUpload.vue";
+
 
 const routes = [
     {
@@ -46,6 +49,16 @@ const routes = [
         name: "ConfirmCopy",
         component: ConfirmCopy
     },
+    {
+        path: "/medicalJournals",
+        name: "medicalJournals",
+        component: MedicalJournals
+    },
+    {
+        path: "/JournalUpload",
+        name: "journalUpload",
+        component: JournalUpload
+    }
 ];
 
 const router = createRouter({
