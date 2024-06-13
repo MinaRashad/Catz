@@ -10,7 +10,7 @@
             </RouterLink>
 
             <RouterLink to="/journalUpload" v-show="showButtons">
-                <button>Upload Journal Entries</button>
+                <button>Write Journal Entries</button>
             </RouterLink>
 
             <!-- <RouterLink to="/" v-show="showButtons">
