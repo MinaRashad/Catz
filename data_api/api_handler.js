@@ -582,7 +582,7 @@ app.get('/journal_types', (req, res) => {
         console.error(error)
         res.sendStatus(500)
     })
-}
+})
 
 app.get('/update_dataset', (req, res) => {
     save_dataset().then(data => {
