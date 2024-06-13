@@ -131,7 +131,6 @@
                         journalEntry.journalEntryAnimalID == '' ||
                         journalEntry.journalEntryEntrytypeID == ''
                     ) {
-                        console.log('Journal entry is missing important values');
                         return;
                     }
 
@@ -157,7 +156,6 @@
                 const url = new URL(window.location.href);
                 const BASE_URL = `${url.protocol}//${url.hostname}`;
                 
-                console.log(JSON.stringify(journalEntry))
 
                 return fetch(`${BASE_URL}:3000/journal`, {
                     method: 'POST',
@@ -176,8 +174,7 @@
                     await this.uploadJournal(JE);
                     this.submitted_count++;
                 }
-                console.log('Done');
-                // this.$router.push({name:'catDetails'});
+                this.$router.push({name:'catDetails'});
             }
 
         },
