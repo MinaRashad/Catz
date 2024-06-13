@@ -335,6 +335,33 @@ function get_journals(cat_id){
     })
 }
 
+function get_Journal_types(){
+    return new Promise((resolve,reject)=>{
+            login().then(login_creds => {
+                request.post(base_url,{
+                    json: {
+                        "token": login_creds['token'],
+                        "tokenHash": login_creds['tokenHash'],
+                          "objectType":"animalsJournalEntrytypes",
+                          "objectAction":"list"                   
+    }
+    }
+    , (error, response, body) => {
+                    if (error) {
+                        console.error(error)
+                        return error
+                    }
+    resolve(body['data'])
+    })  
+            })
+            .catch((error) => {
+                console.error(error)
+                login_creds = null
+                reject(error)
+            })
+        })
+    }
+    
 
 
 /**
@@ -546,6 +573,16 @@ app.get('/journals', (req, res) => {
         res.sendStatus(500)
     })
 })
+
+app.get('/journal_types', (req, res) => {
+    get_Journal_types().then(data => {
+        res.send(data)
+    })
+    .catch((error) => {
+        console.error(error)
+        res.sendStatus(500)
+    })
+}
 
 app.get('/update_dataset', (req, res) => {
     save_dataset().then(data => {
