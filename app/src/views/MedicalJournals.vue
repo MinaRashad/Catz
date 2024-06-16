@@ -4,15 +4,19 @@
         <h1>{{ '<<' }}</h1>
     </router-link>
 
+    <CatCard :cat="cat" />
+
             <h2>Medical Journals</h2>
             <div v-if="loadingJournals">Loading...</div>
         <div v-if="!loadingJournals">
+            <h1>Group 1</h1>
             <div v-for="JE in Vet_info_group_1" :key="JE.journalEntryDate">{{ JE }}</div>
 
             <br><br><br>
             <hr>
             <br><br><br>
 
+            <h1>Group 2</h1>
 
             <div v-for="JE in Vet_info_group_2" :key="JE.journalEntryDate">{{ JE }}</div>
 
@@ -21,21 +25,24 @@
             <hr>
             <br><br><br>
 
+            <h1>Group 3</h1>
 
             <div v-for="JE in Vet_info_group_3" :key="JE.journalEntryDate">{{ JE }}</div>
 
             <br><br><br>
-
+<!-- 
             <hr>
             <br><br><br>
 
 
-            <div v-for="JE in Medical_Records" :key="JE.journalEntryDate">{{ JE }} </div>   
+            <div v-for="JE in Medical_Records" :key="JE.journalEntryDate">{{ JE }} </div>    -->
 
     </div>
 </template>
 
 <script>
+import CatCard from '@/components/CatCard.vue';
+
 
     export default {
         name: 'MedicalJournals',
@@ -44,6 +51,9 @@
                 journals: [],
                 loadingJournals: true
             }
+        },
+        components: {
+            CatCard
         },
         computed: {
             Vet_info_group_1(){
@@ -70,6 +80,9 @@
                 medical.push(...this.Vet_info_group_3);
 
                 return medical;
+            },
+            cat(){
+                return JSON.parse(sessionStorage.getItem('cat'));
             }
 
         },
@@ -87,14 +100,24 @@
                     }
                 })
                 .sort((a, b) => {
+                    // figure out type of a and b
+
+                    const a_type = types.find(type => a.journalEntrytypeDescription.includes(type));
+                    const b_type = types.find(type => b.journalEntrytypeDescription.includes(type));
+
                     // sort by type then date desc
-                    if(a.journalEntrytypeDescription < b.journalEntrytypeDescription){
+                    if(a_type < b_type){
                         return -1;
                     }
+                    
 
-                    if(a.journalEntrytypeDescription == b.journalEntrytypeDescription){
-                        if(a.journalEntryDate < b.journalEntryDate){
-                            return 1;
+                    if(a_type == b_type){
+
+                        const a_date = new Date(a.journalEntryDate);
+                        const b_date = new Date(b.journalEntryDate);
+
+                        if(a_date < b_date){
+                            return -1;
                         }
                     }
 

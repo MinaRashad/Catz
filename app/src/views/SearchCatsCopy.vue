@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <SearchBar placeholder="Write anything here" :callback="searchCats">
+        <SearchBar placeholder="Enter search term(s)" :callback="searchCats">
         </SearchBar>
         <div class='controls'>
 

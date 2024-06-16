@@ -2,15 +2,15 @@
     <div>
         <div class="controls">
             <span v-show="showButtons">
-                <button @click="getGoogleDoc">Create Medical Record Doc</button>
+                <button @click="getGoogleDoc">Create Medical Record</button>
             </span>
 
             <RouterLink to="/medicalJournals" v-show="showButtons">
-                <button>Medical Journal Entries</button>
+                <button>View Medical Journal Entries</button>
             </RouterLink>
 
             <RouterLink to="/journalUpload" v-show="showButtons">
-                <button>Write Journal Entries</button>
+                <button>Enter Multiple Journal Entries</button>
             </RouterLink>
 
             <!-- <RouterLink to="/" v-show="showButtons">
@@ -22,7 +22,7 @@
             </span> -->
 
 
-            <button @click="saveCheckedJournals" v-show="showButtons">Copy Journal Entries to other cats
+            <button @click="saveCheckedJournals" v-show="showButtons">Copy Selected Journal Entries to other cats
             </button>
         </div>
         <table v-if="journals.length>0">

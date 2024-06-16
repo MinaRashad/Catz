@@ -24,9 +24,9 @@
                     <tr>
                         <th>File Name</th>
                         <th>Description</th>
-                        <th>Status</th>
-                        <th>Display Inline</th>
-                        <th>Public</th>
+                        <!-- <th>Status</th> -->
+                        <!-- <th>Display Inline</th> -->
+                        <!-- <th>Public</th> -->
                         <th>Size</th>
                         <th>Created Date</th>
                     </tr>
@@ -35,9 +35,9 @@
                     <tr v-for="file in files" :key="file['animalfileID']">
                         <td>{{ file['animalfileOldName'] }}</td>
                         <td>{{ file['animalfileDescription'] }}</td>
-                        <td>{{ file['animalfileStatus'] }}</td>
-                        <td>{{ file['animalfileDisplayInline'] }}</td>
-                        <td>{{ file['animalfilePublic'] }}</td>
+                        <!-- <td>{{ file['animalfileStatus'] }}</td> -->
+                        <!-- <td>{{ file['animalfileDisplayInline'] }}</td> -->
+                        <!-- <td>{{ file['animalfilePublic'] }}</td> -->
                         <td>{{ file['animalfileSize'] }}</td>
                         <td>{{ file['animalfileCreatedDate'] }}</td>
                     </tr>
