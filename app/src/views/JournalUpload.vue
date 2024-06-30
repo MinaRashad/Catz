@@ -80,7 +80,10 @@
             }
         },
         mounted: async function(){
-            const response = await fetch('http://localhost:3000/journal_types');
+            const url = new URL(window.location.href);
+            const BASE_URL = `${url.protocol}//${url.hostname}`;
+
+            const response = await fetch(`${BASE_URL}:3000/journal_types`);
             this.journalTypes = await response.json();
             this.journal_types_loaded = true;
 
