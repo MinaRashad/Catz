@@ -21,7 +21,7 @@
 
             <table>
                 <thead>
-                    <tr>
+                    <tr class="table-row-even">
                         <th>File Name</th>
                         <th>Description</th>
                         <!-- <th>Status</th> -->
@@ -32,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="file in files" :key="file['animalfileID']">
+                    <tr v-for="(file,index) in files" :key="file['animalfileID']" :class="index%2==0?'table-row-even':'table-row-odd'">
                         <td>{{ file['animalfileOldName'] }}</td>
                         <td>{{ file['animalfileDescription'] }}</td>
                         <!-- <td>{{ file['animalfileStatus'] }}</td> -->
