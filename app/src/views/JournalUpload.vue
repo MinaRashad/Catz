@@ -1,7 +1,7 @@
 <template>
 
     <router-link :to="{name:'catDetails'}">
-        <h1>{{ '<<' }}</h1>
+        <img src="../assets/dancing_back.png" alt="back" class="danceback" title="dance back">
     </router-link>
     <div v-show="journal_types_loaded">    
         <h2>Journal Upload</h2>
@@ -19,11 +19,10 @@
                 <th>Comment</th>
                 <th>Due Date</th>
                 <th>Reminder Date</th>
-                <th>Cost in USD</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="n in numEntries" :key="n">
+            <tr v-for="n in numEntries" :key="n" :class="n%2==0?'table-row-even':'table-row-odd'">
                 <td><input type="date" v-model="journals[n-1].journalEntryDate"></td>
                 <td><select v-model="journals[n-1].journalEntrytypeDescription">
                     <option v-for='type in journalTypes' :key="type.name">{{ type.name }}</option>
@@ -32,7 +31,6 @@
                 <td><input type="textarea" v-model="journals[n-1].journalEntryComment"></td>
                 <td><input type="date" v-model="journals[n-1].journalEntryDueDate"></td>
                 <td><input type="date" v-model="journals[n-1].journalEntryReminderDate"></td>
-                <td><input type="number" v-model="journals[n-1].journalEntryCost"></td>
                 <td><button class="delete" @click="()=>{
                     journals.splice(n-1,1);
                     numEntries--;
@@ -91,7 +89,7 @@
         methods:{
             createJournals(){
                 this.journals = [];
-                this.journalTemplate.journalEntryComment = this.initials.toLocaleUpperCase()+': ';
+                this.journalTemplate.journalEntryComment = this.initials.toLocaleUpperCase()+' : ';
                 for(let i=0; i<this.numEntries; i++)
                 this.journals.push({...this.journalTemplate});
             },

@@ -26,7 +26,7 @@
             </button>
         </div>
         <table v-if="journals.length>0">
-            <tr>
+            <tr class="table-row-even">
                 <th v-if="showButtons" >copy?</th>
         <th @click="sortBy('journalEntryDate')">
           Date <span>{{ sortIcon('journalEntryDate') }}</span>
@@ -41,15 +41,15 @@
           Due Date <span>{{ sortIcon('journalEntryDueDate') }}</span>
         </th>
             </tr>
-            <tr v-for="journal in sortedJournals" :key="journal.journalEntryID">
+            <tr v-for="(journal, index) in sortedJournals" :key="journal.journalEntryID" :class="index % 2 === 0 ? 'table-row-even' : 'table-row-odd'">
                 <td v-if="showButtons"><input type="checkbox" @click="()=>{
                     if(journal.checked === undefined) journal.checked = true;
                     else journal.checked = !journal.checked;
                 }"></td>
-            <td>{{ journal.journalEntryDate }}</td>
-            <td>{{ journal.journalEntrytypeDescription }}</td>
-            <td>{{ journal.journalEntryComment }}</td>
-            <td>{{ journal.journalEntryDueDate }}</td>
+                <td>{{ journal.journalEntryDate }}</td>
+                <td>{{ journal.journalEntrytypeDescription }}</td>
+                <td>{{ journal.journalEntryComment }}</td>
+                <td>{{ journal.journalEntryDueDate }}</td>
             </tr>
         </table>
         

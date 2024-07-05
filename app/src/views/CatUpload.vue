@@ -1,6 +1,6 @@
 <template>
     <RouterLink :to="{name:'catDetails'}">
-            <h1>{{ '<<' }}</h1>
+        <img src="../assets/dancing_back.png" alt="back" class="danceback" title="dance back">
     </RouterLink>
     <uploadContainer :handleFiles="handleFiles">
         <h1>Drop files here</h1>
@@ -11,13 +11,13 @@
  <h1 v-else>Uploading {{ Math.round(100*uploadedSize/totalSize) }}%</h1>
     <table>
         <thead>
-            <tr>
+            <tr class="table-row-even">
                 <th>File Name</th>
                 <th>type</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="file in files" :key="file.name">
+            <tr v-for="(file, index) in files" :key="file.name" :class="index % 2 === 0 ? 'table-row-even' : 'table-row-odd'">
                 <td>{{ file.name }}</td>
                 <td>
                     <select :value="fileType(file.name)"  @change="event => {

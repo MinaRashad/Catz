@@ -1,6 +1,7 @@
 <template>
 
     <div>
+        <img src="../assets/dancing_cat.png" alt="Dancing Cat" class="dancing_cat">
         <SearchBar placeholder="Enter search term(s)" :callback="searchCats"/>
         <!-- update button -->
         <UpdateButton :handle="()=>this.searchCats('')" />
@@ -64,3 +65,16 @@
         }
     }
 </script>
+
+<style>
+
+.dancing_cat {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    /* remove white background */
+    background-color: transparent;
+}
+
+</style>

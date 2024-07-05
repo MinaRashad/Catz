@@ -1,7 +1,7 @@
 <template>
 
     <router-link :to="{name:'catDetails'}">
-        <h1>{{ '<<' }}</h1>
+        <img src="../assets/dancing_back.png" alt="back" class="danceback" title="dance back">
     </router-link>
 
     <CatCard :cat="cat" />

@@ -2,7 +2,7 @@
     <h1 v-show="!cat">Please use the search functionality rather than direct links</h1>
     <!-- <h1>Loading cat {{ $route.params.id }}...</h1> -->
     <RouterLink :to="{name:'searchCats'}">
-            <h1>{{ '<<' }}</h1>
+            <img src="../assets/dancing_back.png" alt="back" class="danceback" title="dance back">
     </RouterLink>
     <div class="controls">
         
@@ -14,15 +14,12 @@
         </RouterLink>
 
     </div>
-    <div>
+    <div class="cat-details">
         <img :src="img">
         <h1>{{ cat.animalName }}</h1>
         <h2>{{ cat.animalSex }} - {{ cat.animalBreed }} - {{ cat.animalStatus }} </h2>
     </div>
-  
-
-    <h1>Journal Entries</h1>
-    
+      
     <div v-if="loadingJournals">Loading...</div>
     <div v-else>
         <journals :journals="journals" />
@@ -108,8 +105,10 @@
         /* center */
         margin-left: auto;
         margin-right: auto;
-        width: 40%;
-        transform: translate(10%,0);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
     }
     .controls button {
         margin: 10px;
@@ -124,5 +123,10 @@
     .controls button:hover {
         background-color: #1f1f1f;
         color: #f1f1f1
+    }
+    .cat-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

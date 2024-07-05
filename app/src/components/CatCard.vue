@@ -93,7 +93,7 @@ export default {
     padding: 0.3vh;
     border: 5px solid #000000;
     border-radius: 10px;
-    background-color: #C5979D;
+    background-color: rgb(255,127,0);
     box-shadow: 3px 3px 1px 1px #000000;
     width: 10vw;
     text-decoration: none;
@@ -117,7 +117,8 @@ export default {
 }
 
 .cat-card:hover{
-    color: #533f42;
+    color: #fff;
+    background-color: rgb(139, 77, 1);
 }
 
 </style>

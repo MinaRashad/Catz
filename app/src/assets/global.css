@@ -3,15 +3,30 @@ body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color:cornsilk;
+    /* create pattern with colors rgb(0,169,153), rgb(49,191,176) */
+    background: linear-gradient(90deg, rgb(41, 194, 179) 0%, rgb(255,127,0) 150%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color:#2B193D;
 }
 
-/* color pallete?
---cornsilk: #fff7deff;
---ebony: #5f634fff;
---dark-purple: #2b193dff;
---delft-blue: #2c365eff;
---rosy-brown: #c5979dff;
+.danceback{
+    /* this is an image, apply filters so that it is all black */
+    filter: brightness(0%);
+    display: block;
+    width: 10%;
 
+}
+
+
+.table-row-odd{
+    background-color: rgb(255,255,255);
+}
+.table-row-even{
+    background-color: rgb(208, 208, 208);
+}
+/* color pallete?
+rgb(0,169,153)
+rgb(49,191,176)
+rgb(255,127,0)
 */
