@@ -25,7 +25,7 @@
             <tr v-for="n in numEntries" :key="n" :class="n%2==0?'table-row-even':'table-row-odd'">
                 <td><input type="date" v-model="journals[n-1].journalEntryDate"></td>
                 <td><select v-model="journals[n-1].journalEntrytypeDescription">
-                    <option v-for='type in journalTypes' :key="type.name">{{ type.name }}</option>
+                    <option v-for='type of Object.values(journalTypes).map(x=>x.name).toSorted()' :key="type.name">{{ type }}</option>
                 </select>
                 </td>
                 <td><input type="textarea" v-model="journals[n-1].journalEntryComment"></td>

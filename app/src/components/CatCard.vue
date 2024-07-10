@@ -3,7 +3,7 @@
         <div class="cat-card"  @click="passCat">
                 <img :src="img" :alt="cat.animalName" />
                 <h2>{{ cat.animalName }}</h2>
-                <h3>{{ cat.animalGeneralAge }} {{ cat.animalSex }} {{ cat.animalBreed }}</h3>
+                <h3>{{ cat.animalGeneralAge }} {{ cat.animalSex }} {{ cat.animalBreed }} <br>Status: {{ cat.animalStatus }}</h3>
         </div>
 
 
