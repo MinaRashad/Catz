@@ -4,7 +4,7 @@ body{
     padding: 0;
     box-sizing: border-box;
     /* create pattern with colors rgb(0,169,153), rgb(49,191,176) */
-    background: linear-gradient(90deg, rgb(41, 194, 179) 0%, rgb(255,127,0) 150%);
+    background: white;
     background-repeat: no-repeat;
     background-attachment: fixed;
     color:#2B193D;
@@ -14,7 +14,7 @@ body{
     /* this is an image, apply filters so that it is all black */
     filter: brightness(0%);
     display: block;
-    width: 10%;
+    width: 5%;
 
 }
 
