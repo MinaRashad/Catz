@@ -14,11 +14,11 @@
     <table v-if="journals_visible">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Comment</th>
-                <th>Due Date</th>
-                <th>Reminder Date</th>
+                <th class="narrow-column">Date</th>
+                <th class="narrow-column">Type</th>
+                <th class="wide-column">Comment</th>
+                <!-- <th>Due Date</th>
+                <th>Reminder Date</th> -->
             </tr>
         </thead>
         <tbody>
@@ -29,8 +29,8 @@
                 </select>
                 </td>
                 <td><input type="textarea" v-model="journals[n-1].journalEntryComment"></td>
-                <td><input type="date" v-model="journals[n-1].journalEntryDueDate"></td>
-                <td><input type="date" v-model="journals[n-1].journalEntryReminderDate"></td>
+                <!-- <td><input type="date" v-model="journals[n-1].journalEntryDueDate"></td>
+                <td><input type="date" v-model="journals[n-1].journalEntryReminderDate"></td> -->
                 <td><button class="delete" @click="()=>{
                     journals.splice(n-1,1);
                     numEntries--;
@@ -60,7 +60,7 @@
         data(){
             return {
                 initials: '',
-                numEntries: 0,
+                numEntries: 1,
                 journals: [],
                 journals_visible:false,
                 journalTemplate:{
@@ -89,7 +89,7 @@
         methods:{
             createJournals(){
                 this.journals = [];
-                this.journalTemplate.journalEntryComment = this.initials.toLocaleUpperCase()+' : ';
+                this.journalTemplate.journalEntryComment = this.initials.toLocaleUpperCase()+': ';
                 for(let i=0; i<this.numEntries; i++)
                 this.journals.push({...this.journalTemplate});
             },
@@ -193,6 +193,19 @@
 .delete:hover{
     background-color: darkred;
     cursor: pointer;
+}
+
+.wide-column{
+    width: 50%;
+}
+
+.narrow-column{
+    width: 20%;
+}
+
+input[type='textarea']{
+    width: 90%;
+    height: 2em;
 }
 
 </style>
