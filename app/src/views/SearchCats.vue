@@ -58,7 +58,9 @@
             fetch(`${BASE_URL}:3000/search?searchterm=${search}`)
             .then(response => response.json())
             .then(data => {
-                if (this.searching) this.cats = data; // prevent updating data if user has already searched again
+                // get textbox value
+                let current_search = document.getElementById("search").value;
+                if(current_search === search) this.cats = data; // prevent updating data if user has already searched again
                 this.searching = false;
             })
             }

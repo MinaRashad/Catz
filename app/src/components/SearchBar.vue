@@ -1,7 +1,7 @@
 <template>
     <!-- create a search bar -->
     <div class="search">
-      <input type="text" v-model="search" :placeholder="placeholder" @input="callback(search)"
+      <input type="text" v-model="search" id="search" :placeholder="placeholder" @input="callback(search)"
           title=
           "; for AND operator
 - for NOT operator"/>
