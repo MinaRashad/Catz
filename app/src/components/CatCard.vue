@@ -64,7 +64,6 @@ export default {
     },
     methods: {
         passCat() {
-            console.log(this.pass)
             if (this.pass) {
                 // clear session storage
                 sessionStorage.clear();

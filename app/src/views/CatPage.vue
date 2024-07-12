@@ -82,9 +82,8 @@
                     return data;
 
                 })
-                .then((data) => {
+                .then(() => {
                     this.loadingJournals = false;
-                    console.log(data);
 
                 })
             }

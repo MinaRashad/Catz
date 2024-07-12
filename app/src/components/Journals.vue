@@ -81,7 +81,6 @@
         },
         computed: {
             sortedJournals(){
-                console.log(this.sortJournals)
                 if(this.sortByKey){
                     return this.sortJournals(this.journals, this.sortByKey, this.sortAscending);
                 } else {

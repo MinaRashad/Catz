@@ -21,7 +21,6 @@
                 <td>{{ file.name }}</td>
                 <td>
                     <select :value="fileType(file.name)"  @change="event => {
-                        console.log(event.target.value)
                         types[file.name] = event.target.value;
                     }">
                         <option value="image">Image</option>
