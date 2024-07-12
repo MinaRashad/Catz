@@ -58,7 +58,7 @@
             fetch(`${BASE_URL}:3000/search?searchterm=${search}`)
             .then(response => response.json())
             .then(data => {
-                this.cats = data;
+                if (this.searching) this.cats = data; // prevent updating data if user has already searched again
                 this.searching = false;
             })
             }
