@@ -3,7 +3,8 @@
     <div class="search">
       <input type="text" v-model="search" id="search" :placeholder="placeholder" @input="callback(search)"
           title=
-          "; for AND operator
+          "AND for AND operator
+OR for OR operator
 - for NOT operator"/>
       <button @click="search = ''">Clear</button>
       <slot>
