@@ -227,43 +227,56 @@ function read_dataset(){
 
 function search(search_term){
     search_term = search_term?search_term:''
-    console.log('searching for: '+search_term)
     return new Promise((resolve,reject)=>{
         read_dataset().then(data => {
+
             // turn data json into array
-            data = Object.values(data)
-            let terms = search_term.split(';')
-            // remove last term if length is larger than 1 and last term is empty
-            if (terms.length > 1 && terms[terms.length-1] === '') terms.pop()
+            data = Object.values(data);
 
-            let filtered_data = data
+            // Split by OR operator
+            const orGroups = search_term.split(' OR ');
 
-            // filter data
-            terms.forEach(term => {
-                let not_indicator = term.startsWith('-')
-                if (not_indicator) term = term.replace('-','')
-                filtered_data = filtered_data.filter((cat) => {
-                    // search all fields for search term
+            orGroups.filter(group => group !== ''); // Remove empty groups
+
+            let orFilteredData = [];
+
+            orGroups.forEach(group => {
+                let terms = group.split(' AND '); // AND operator within each OR group
+
+                terms.filter(term => term !== ''); // Remove empty terms
+                // Remove last term if length is larger than 1 and last term is empty
+                if (terms.length > 1 && terms[terms.length - 1] === '') terms.pop();
+
+                let filteredData = data;
+
+                // Apply AND and NOT logic
+                terms.forEach(term => {
+                    let notIndicator = term.startsWith('-'); // NOT operator
+                    if (notIndicator) term = term.substring(1); // Remove '-' from term
+                    filteredData = filteredData.filter(cat => {
+                        // Search all fields for search term
                         for (const [key, value] of Object.entries(cat)) {
-                                                        
-                            if ( typeof value === 'string' && value.toLowerCase().includes(term.toLowerCase())) {
-                                return !not_indicator // if not indicator is present, return false
+                            if (typeof value === 'string' && value.toLowerCase().includes(term.toLowerCase())) {
+                                return !notIndicator; // If NOT indicator is present, return false
                             }
-                            
                         }
-    
-                        return not_indicator // if not indicator is present, return true
+                        return notIndicator; // If NOT indicator is present, return true
+                    });
+                });
+                        
+                        // Combine results from this OR group with previous results, avoiding duplicates
+                        orFilteredData = [...new Set([...orFilteredData, ...filteredData])];
+
+                    });
+
+                    resolve(orFilteredData);
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                        reject(error)
+                    })
                 })
-            })
-            
-            resolve(filtered_data)
-        })
-        .catch((error) => {
-            console.error(error)
-            reject(error)
-        })
-    })
-}
+            }
 
 /**
  * Get Cat function
