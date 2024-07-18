@@ -103,6 +103,14 @@ export default {
     width: 10vw;
     height: 10vw;
     margin-bottom: 1vh;
+    /* center */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
 }
 
 .cat-card h2 {
