@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(file,index) in files" :key="file['animalfileID']" :class="index%2==0?'table-row-even':'table-row-odd'">
-                        <td>{{ file['animalfileOldName'] }}</td>
+                        <td><a :href="'https://rescuegroups.org/manage/file_open?type=animal&fileID='+file['animalfileID']" target="_blank">{{ file['animalfileOldName'] }}</a></td>
                         <td>{{ file['animalfileDescription'] }}</td>
                         <!-- <td>{{ file['animalfileStatus'] }}</td> -->
                         <!-- <td>{{ file['animalfileDisplayInline'] }}</td> -->
