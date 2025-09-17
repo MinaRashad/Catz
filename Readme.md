@@ -1,8 +1,8 @@
 # Catz: The Dancing Cats Data management UI
 
-This repo is a UI interface for rescuegroups.org API. Made for the dancing cats
+![Demo](demo/UI.png)
 
-The repo is currently missing the funcationality needed to produce Google Docs/Pdfs
+This repo is a UI interface for rescuegroups.org API. Made for the dancing cats
 
 It can:
 - Live search with minimal API requests
